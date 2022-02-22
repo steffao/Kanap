@@ -14,8 +14,6 @@ const fetchProducts = () => { // fetchProducts() renvoie une promesse contenant 
     .catch(error => console.log('error', error));
 }
 
-
-
 const buildProductPage = async (productId) => { // buildProductPage() va créer les éléments contenus dans la page produit et définir les valeurs et propriétés de ces éléments
     //buildProductPage() est une fonction asynchrone s'exécutant lorsqu'elle dispose des résultats de la promesse issue de fetchProducts()
     const products = await fetchProducts(); // products représente le tableau des données classé par produit
@@ -41,10 +39,84 @@ const buildProductPage = async (productId) => { // buildProductPage() va créer 
       productColorOption.value = productColor
       productColorOption.textContent = productColor
       document.querySelector('select#colors').appendChild(productColorOption)
-    } 
+    }
+    
    
 }
 buildProductPage(productId);
 
+ //-------------------Local Storage-----------
 
+const addToLocalStorage = (productId,productColor,quantity) => { 
+  
+  let productsList = JSON.parse(localStorage.getItem("product")) // Récupération du contenu du local storage de la key product pour ajouter des éléments
+
+  if (productsList === null) { // Si productList est vide il renvoie null et ne peut exécuter la fonction. Il est nécessaire alors d'avoir un tableau vide pour pousser le premier élément
+    productsList = []
+  }
+
+  console.log(productsList)
+
+  let productSelected = {
+    id : productId,
+    color : productColor, //couleur sélectionné
+    quantity : Number(quantity)
+  } 
+
+  if (productsList.find(element => element.id == productSelected.id && element.color == productSelected.color)){ // Si un élément du tableau productList a les mêmes id ET couleur que le produit sélectionné 
+    
+    let existingProduct = productsList.find(element => element.id == productSelected.id && element.color == productSelected.color)
+    existingProduct.quantity += productSelected.quantity
+  } else {
+    productsList.push(productSelected)
+  }
+  
+  
+  localStorage.setItem("product", JSON.stringify(productsList))  
+}
+
+document.querySelector("button#addToCart").addEventListener("click", function(){
+  let productColor = document.querySelector('select#colors').value //couleur sélectionné
+  let quantity = document.querySelector('input#quantity').value
+  
+  if (productColor.value =="" || quantity < 1){ // La fonction s'execute si tous les champs sont renseignés et que le nombre d'articles selectionné est entre 0 et 100
+    window.alert("Veuillez choisir une couleur et une quantité d'articles.")
+
+  } else if (Number(quantity) > 100){
+    window.alert("Vous avez excéder la quantité d'articles autorisée.")
+  } else {
+    addToLocalStorage(productId,productColor,quantity)
+  }   
+})
+
+
+
+
+
+
+
+/* 
+ <article class="cart__item" data-id="{product-ID}" data-color="{product-color}">
+                <div class="cart__item__img">
+                  <img src="../images/product01.jpg" alt="Photographie d'un canapé">
+                </div>
+                <div class="cart__item__content">
+                  <div class="cart__item__content__description">
+                    <h2>Nom du produit</h2>
+                    <p>Vert</p>
+                    <p>42,00 €</p>
+                  </div>
+                  <div class="cart__item__content__settings">
+                    <div class="cart__item__content__settings__quantity">
+                      <p>Qté : </p>
+                      <input type="number" class="itemQuantity" name="itemQuantity" min="1" max="100" value="42">
+                    </div>
+                    <div class="cart__item__content__settings__delete">
+                      <p class="deleteItem">Supprimer</p>
+                    </div>
+                  </div>
+                </div>
+              </article> 
+
+*/
 
