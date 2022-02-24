@@ -47,76 +47,40 @@ buildProductPage(productId);
 
  //-------------------Local Storage-----------
 
-const addToLocalStorage = (productId,productColor,quantity) => { 
+const addToCart = (productId,productColor,quantity) => { // Ajoute le produit dans le local storage. Les paramétes sont les caractéristiques du produit sélectionné
   
-  let productsList = JSON.parse(localStorage.getItem("product")) // Récupération du contenu du local storage de la key product pour ajouter des éléments
+  let itemsList = JSON.parse(localStorage.getItem("cart")) // Récupération du contenu du local storage de la key product pour ajouter des éléments
 
-  if (productsList === null) { // Si productList est vide il renvoie null et ne peut exécuter la fonction. Il est nécessaire alors d'avoir un tableau vide pour pousser le premier élément
-    productsList = []
+  if (itemsList === null) { // Si productList est vide il renvoie null et ne peut exécuter la fonction. Il est nécessaire alors d'avoir un tableau vide pour pousser le premier élément
+    itemsList = []
   }
-
-  console.log(productsList)
-
+  console.log(productColor)
   let productSelected = {
     id : productId,
     color : productColor, //couleur sélectionné
     quantity : Number(quantity)
   } 
 
-  if (productsList.find(element => element.id == productSelected.id && element.color == productSelected.color)){ // Si un élément du tableau productList a les mêmes id ET couleur que le produit sélectionné 
-    
-    let existingProduct = productsList.find(element => element.id == productSelected.id && element.color == productSelected.color)
-    existingProduct.quantity += productSelected.quantity
+  let existingItem = itemsList.find(element => element.id == productSelected.id && element.color == productSelected.color) // Element du local storage ayant les mêmes id ET couleur que le produit choisi
+  if (existingItem){ // Si un élément du tableau productList a les mêmes id ET couleur que le produit sélectionné 
+      
+    existingItem.quantity += productSelected.quantity
   } else {
-    productsList.push(productSelected)
-  }
-  
-  
-  localStorage.setItem("product", JSON.stringify(productsList))  
+    itemsList.push(productSelected)
+  }  
+  localStorage.setItem("cart", JSON.stringify(itemsList))  
 }
 
 document.querySelector("button#addToCart").addEventListener("click", function(){
   let productColor = document.querySelector('select#colors').value //couleur sélectionné
   let quantity = document.querySelector('input#quantity').value
   
-  if (productColor.value =="" || quantity < 1){ // La fonction s'execute si tous les champs sont renseignés et que le nombre d'articles selectionné est entre 0 et 100
+  if (productColor === "" || quantity < 1){ // La fonction s'execute si tous les champs sont renseignés et que le nombre d'articles selectionné est entre 0 et 100
     window.alert("Veuillez choisir une couleur et une quantité d'articles.")
-
+    console.log(productColor.value)
   } else if (Number(quantity) > 100){
-    window.alert("Vous avez excéder la quantité d'articles autorisée.")
+    window.alert("Vous avez excédé la quantité d'articles autorisée.")
   } else {
-    addToLocalStorage(productId,productColor,quantity)
+    addToCart(productId,productColor,quantity) 
   }   
 })
-
-
-
-
-
-
-
-/* 
- <article class="cart__item" data-id="{product-ID}" data-color="{product-color}">
-                <div class="cart__item__img">
-                  <img src="../images/product01.jpg" alt="Photographie d'un canapé">
-                </div>
-                <div class="cart__item__content">
-                  <div class="cart__item__content__description">
-                    <h2>Nom du produit</h2>
-                    <p>Vert</p>
-                    <p>42,00 €</p>
-                  </div>
-                  <div class="cart__item__content__settings">
-                    <div class="cart__item__content__settings__quantity">
-                      <p>Qté : </p>
-                      <input type="number" class="itemQuantity" name="itemQuantity" min="1" max="100" value="42">
-                    </div>
-                    <div class="cart__item__content__settings__delete">
-                      <p class="deleteItem">Supprimer</p>
-                    </div>
-                  </div>
-                </div>
-              </article> 
-
-*/
-
