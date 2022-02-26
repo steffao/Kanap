@@ -269,13 +269,13 @@ const buildproductIdArray = () => { // crée le tableau product contenant toutes
 
     productIdArray.push(article.dataset.id)
   }
-  console.log(productIdArray)
+  
   return productIdArray
 }
 
 //---------Submit order------------
 
-order.addEventListener("click", function(e) {
+order.addEventListener("click", function(e) { 
   e.preventDefault() // Annule le comportement de e soit l'input order
   if (checkForm() == true && checkArray() == true) { // Vérifie que l'objet contact et le tableau product sont conformes et non vides
     
@@ -293,10 +293,8 @@ order.addEventListener("click", function(e) {
     
     .catch(error => {
     console.error('Error:', error);
-    });
-    
+    });   
   }
-
 })
 
 
