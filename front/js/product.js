@@ -2,7 +2,7 @@
 /* L'id du produit servira de paramétre pour afficher les données liées au produit. On se sert de l'url de la page pour récupérer l'id */
 const searchParams = new URLSearchParams(location.search) // Fournit des méthodes utilitaires liés à l'URL. location.search correspond à "?id=....."
 const productId = searchParams.get("id")  // Retourne la valeur du paramétre id
-console.log(productId)
+
 
 /*  Pour activer le serveur distant de l'API, dans le terminal se mettre sur le répertoire back et déclencher la commance "npm start" (cf. README)*/
 const baseUrlApi = 'http://localhost:3000/api/products/'
