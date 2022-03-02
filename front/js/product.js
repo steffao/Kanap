@@ -7,18 +7,18 @@ const productId = searchParams.get("id")  // Retourne la valeur du paramétre id
 /*  Pour activer le serveur distant de l'API, dans le terminal se mettre sur le répertoire back et déclencher la commance "npm start" (cf. README)*/
 const baseUrlApi = 'http://localhost:3000/api/products/'
 
-const fetchProducts = () => { // fetchProducts() renvoie une promesse contenant les données de l'API
+const fetchProducts = (id) => { // fetchProducts() renvoie une promesse contenant les données de l'API
 
-  return fetch(`${baseUrlApi}`) 
+  return fetch(`${baseUrlApi}${id}`) 
     .then(response => response.json())
     .catch(error => console.log('error', error));
 }
 
 const buildProductPage = async (productId) => { // buildProductPage() va créer les éléments contenus dans la page produit et définir les valeurs et propriétés de ces éléments
     //buildProductPage() est une fonction asynchrone s'exécutant lorsqu'elle dispose des résultats de la promesse issue de fetchProducts()
-    const products = await fetchProducts(); // products représente le tableau des données classé par produit
+    const product = await fetchProducts(productId); // products représente le tableau des données classé par produit
     
-    const product = products.find(element => element._id === productId) 
+    
     
     const productLogo = document.createElement('img')
     productLogo.src = `../images/logo.png`
@@ -75,9 +75,9 @@ document.querySelector("button#addToCart").addEventListener("click", function(){
   let productColor = document.querySelector('select#colors').value //couleur sélectionné
   let quantity = document.querySelector('input#quantity').value
   
-  if (productColor === "" || quantity < 1){ // La fonction s'execute si tous les champs sont renseignés et que le nombre d'articles selectionné est entre 0 et 100
+  if (productColor === "" || quantity < 1){ // La fonction addToCart s'execute si tous les champs sont renseignés et que le nombre d'articles selectionné est entre 0 et 100
     window.alert("Veuillez choisir une couleur et une quantité d'articles.")
-    console.log(productColor.value)
+    
   } else if (Number(quantity) > 100){
     window.alert("Vous avez excédé la quantité d'articles autorisée.")
   } else {

@@ -2,8 +2,6 @@
 /*  Pour activer le serveur distant de l'API, dans le terminal se mettre sur le répertoire back et déclencher la commance "npm start" (cf. README)*/
 const baseUrlApi = 'http://localhost:3000/api/products/'
 
-
-
 const fetchProducts = () => { // fetchProducts() renvoie une promesse contenant les données de l'API
 
 // var requestOptions = {
@@ -15,8 +13,6 @@ return fetch(`${baseUrlApi}`)
   .then(response => response.json()) // Si promesse respectée => Données de l'API disponible
   .catch(error => console.log('error', error)); // Si promesse non respectée => Message d'erreur dans la console
 }
-
-
 
 const buildSectionProducts = async () => { // buildSectionProducts() va créer les éléments contenus dans la section.items et définir les valeurs et propriétés de ces éléments
     //buildSectionProducts() est une fonction asynchrone s'exécutant lorsqu'elle dispose des résultats de la promesse issue de fetchProducts()
@@ -47,8 +43,7 @@ const buildSectionProducts = async () => { // buildSectionProducts() va créer l
         productDescription.textContent = product.description
         productArticle.appendChild(productDescription)
 
-    }
-   
+    }  
 }
 buildSectionProducts();
 
