@@ -54,7 +54,7 @@ const addToCart = (productId,productColor,quantity) => { // Ajoute le produit da
   if (itemsList === null) { // Si productList est vide il renvoie null et ne peut exécuter la fonction. Il est nécessaire alors d'avoir un tableau vide pour pousser le premier élément
     itemsList = []
   }
-  console.log(productColor)
+  
   let productSelected = {
     id : productId,
     color : productColor, //couleur sélectionné
@@ -62,10 +62,15 @@ const addToCart = (productId,productColor,quantity) => { // Ajoute le produit da
   } 
 
   let existingItem = itemsList.find(element => element.id == productSelected.id && element.color == productSelected.color) // Element du local storage ayant les mêmes id ET couleur que le produit choisi
-  if (existingItem){ // Si un élément du tableau productList a les mêmes id ET couleur que le produit sélectionné 
+  if (existingItem && (existingItem.quantity + productSelected.quantity <= 100)){ // Si un élément du tableau productList a les mêmes id ET couleur que le produit sélectionné 
       
     existingItem.quantity += productSelected.quantity
-  } else {
+
+  } else if (existingItem && (existingItem.quantity + productSelected.quantity > 100)){ // Si le nombre d'un article excéde 100 suite à l'ajout dans le panier de ce même article, le nombre plafonne à 100
+    
+    existingItem.quantity = 100
+  
+  } else { // Si article nom présent dans le local Storage, l'ajouter
     itemsList.push(productSelected)
   }  
   localStorage.setItem("cart", JSON.stringify(itemsList))  
